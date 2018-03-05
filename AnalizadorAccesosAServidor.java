@@ -4,15 +4,13 @@ import java.util.ArrayList;
 
 public class AnalizadorAccesosAServidor
 {
-    private ArrayList<Acceso> accesos;
-    
+    private ArrayList<Acceso> accesos;  
     
     public AnalizadorAccesosAServidor() 
     {
         accesos = new ArrayList<>();
     }
-    
-    
+        
     public void analizarArchivoDeLog(String archivo)
     {
         accesos.clear();
@@ -30,12 +28,10 @@ public class AnalizadorAccesosAServidor
             System.out.println("Ocurrio algun error al leer el archivo.");
         }
     }
-    
-    
+        
     public int obtenerHoraMasAccesos() 
     {
-        int valorADevolver = -1;
-        
+        int valorADevolver = -1;        
         if (!accesos.isEmpty()) {
             int[] accesosPorHora = new int[24];
     
@@ -57,9 +53,7 @@ public class AnalizadorAccesosAServidor
         }
         
         return valorADevolver;
-    }
-
-    
+    }   
     
     public String paginaWebMasSolicitada() 
     {
