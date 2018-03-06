@@ -111,6 +111,34 @@ public class AnalizadorAccesosAServidor
      */
     public String clienteConMasAccesosExitosos()
     {
-        return "";
+        String IPClienteConMasAccesosExitosos = null;
+        if (!accesos.isEmpty()) {
+            ArrayList<Acceso> accesosExitosos = new ArrayList<>();
+            ArrayList<Integer> listaUltimoNumeroIP = new ArrayList<>();
+            int IPConMayorNumeroDeConexiones = 0;
+            for (Acceso accesoActual : accesos) {
+                if (accesoActual.getCodigoHTTP() == 200) {
+                    accesosExitosos.add(accesoActual);
+                    int ultimoValorIP = Integer.parseInt(accesoActual.getIp().substring(10, accesoActual.getIp().length()));
+                    listaUltimoNumeroIP.add(ultimoValorIP);
+                }
+            }
+
+            for (int i = 0; i < listaUltimoNumeroIP.size(); i++) {
+                int numeroActual = listaUltimoNumeroIP.get(i);
+                int IPNumeroConexionesAComparar = 0;
+                for (int j = i + 1; j < listaUltimoNumeroIP.size(); j++) {
+                    int numeroAComparar = listaUltimoNumeroIP.get(j);
+                    if (numeroAComparar == numeroActual) {
+                        IPNumeroConexionesAComparar++;
+                    }
+                }
+                if (IPNumeroConexionesAComparar > IPConMayorNumeroDeConexiones) {
+                    IPConMayorNumeroDeConexiones = IPNumeroConexionesAComparar;
+                    IPClienteConMasAccesosExitosos = accesosExitosos.get(i).getIp();
+                }
+            }
+        }
+        return IPClienteConMasAccesosExitosos;
     }
 }
