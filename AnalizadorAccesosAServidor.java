@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class AnalizadorAccesosAServidor
 {
     private ArrayList<Acceso> accesos;  
-    
+
     /**
      * El constructor de la clase. Crea un analizador de accesos al servidor.
      */
@@ -21,7 +21,7 @@ public class AnalizadorAccesosAServidor
     {
         accesos = new ArrayList<>();
     }
-    
+
     /**
      * Este método permite cargar los datos de acceso al servidor.
      * 
@@ -44,7 +44,7 @@ public class AnalizadorAccesosAServidor
             System.out.println("Ocurrio algun error al leer el archivo.");
         }
     }
-    
+
     /**
      * Este método comprueba a qué hora se produjeron más conexiones o accesos al servidor. Devuelve la hora con más conexiones, y en caso de empate devuelve la hora más alta. Si no hay conexiones
      * devuelve -1.
@@ -55,12 +55,12 @@ public class AnalizadorAccesosAServidor
         int valorADevolver = -1;        
         if (!accesos.isEmpty()) {
             int[] accesosPorHora = new int[24];
-    
+
             for (Acceso accesoActual : accesos) {
                 int horaAccesoActual = accesoActual.getHora();
                 accesosPorHora[horaAccesoActual] = accesosPorHora[horaAccesoActual] + 1;
             }
-            
+
             int numeroDeAccesosMasAlto = accesosPorHora[0];
             int horaDeAccesosMasAlto = 0;
             for (int i = 0; i < accesosPorHora.length; i++) {
@@ -69,22 +69,42 @@ public class AnalizadorAccesosAServidor
                     horaDeAccesosMasAlto = i;
                 }
             }
-            
+
             valorADevolver = horaDeAccesosMasAlto;                      
         }
-        
+
         return valorADevolver;
     }   
-    
+
     /**
      * Muestra la web más solicitada por la gente.
      * @return webMasSolicitada Devuelve como cadena la web más solicitada.
      */
     public String paginaWebMasSolicitada() 
     {
-        return "";
+        String webMasSolicitada = null;
+        if (!accesos.isEmpty()) {
+            int numeroVisitasPaginaMasVisitada = 0;
+            for (int i = 0; i < accesos.size(); i++) {
+                Acceso accesoActual = accesos.get(i);
+                int numeroVisitasPaginaComparada = 0;
+                if (accesoActual.getUrl() != webMasSolicitada) {
+                    for (int j = i; j < accesos.size(); j++) {
+                        Acceso accesoAComparar = accesos.get(j);
+                        if (accesoActual.getUrl().equals(accesoAComparar.getUrl())) {
+                            numeroVisitasPaginaComparada++;                            
+                        }
+                    }
+                    if (numeroVisitasPaginaComparada > numeroVisitasPaginaMasVisitada) {
+                        numeroVisitasPaginaMasVisitada = numeroVisitasPaginaComparada;
+                        webMasSolicitada = accesoActual.getUrl();
+                    }
+                }
+            }
+        }
+        return webMasSolicitada;
     }
-    
+
     /**
      * Muestra la IP del cliente con más accesos exitosos.
      * @return clienteConMasAccesos Devuelve el cliente con más accesos.
